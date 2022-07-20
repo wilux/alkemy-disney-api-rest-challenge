@@ -2,6 +2,7 @@ package alkemy.challenge.disney_api_rest.rest;
 
 import alkemy.challenge.disney_api_rest.model.CharacterDTO;
 import alkemy.challenge.disney_api_rest.service.CharacterService;
+import alkemy.challenge.disney_api_rest.view.View;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
 import javax.validation.Valid;
@@ -17,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 @RestController
 @RequestMapping(value = "/api/characters", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,22 +41,25 @@ public class CharacterResource {
     // Mis modificaciones
 
     @GetMapping(params = { "name" })
+    @JsonView(value = View.UserView.External.class)
     public ResponseEntity<List<CharacterDTO>> getCharacterByName(@RequestParam String name) {
-        System.out.println("name: " + name);
+
         return ResponseEntity.ok(characterService.getByName(name));
 
     }
 
     @GetMapping(params = { "age" })
+    @JsonView(value = View.UserView.External.class)
     public ResponseEntity<List<CharacterDTO>> getCharacterByAge(@RequestParam String age) {
-        System.out.println("age: " + age);
+
         return ResponseEntity.ok(characterService.getByAge(age));
 
     }
 
     @GetMapping(params = { "movies" })
+    @JsonView(value = View.UserView.External.class)
     public ResponseEntity<List<CharacterDTO>> getCharacterByMovie(@RequestParam final Long idMovie) {
-        System.out.println("movies: " + idMovie);
+
         return ResponseEntity.ok(characterService.getByMovie(idMovie));
 
     }

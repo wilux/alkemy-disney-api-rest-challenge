@@ -3,15 +3,21 @@ package alkemy.challenge.disney_api_rest.model;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import alkemy.challenge.disney_api_rest.view.View;
 
 public class CharacterDTO {
 
     private Long id;
 
+    @JsonView(View.UserView.External.class)
     @NotNull
     @Size(max = 255)
     private String image;
 
+    @JsonView(View.UserView.External.class)
     @NotNull
     @Size(max = 255)
     private String name;
@@ -20,6 +26,7 @@ public class CharacterDTO {
     @Size(max = 255)
     private String age;
 
+    @JsonIgnore
     @NotNull
     @Size(max = 255)
     private String weight;
