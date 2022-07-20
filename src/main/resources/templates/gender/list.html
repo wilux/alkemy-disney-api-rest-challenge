@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{gender.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{gender.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/genders/add}" th:text="#{gender.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:if="${genders.empty}" th:text="#{gender.list.empty}" />
+            <div th:if="${!genders.empty}" class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th th:text="#{gender.id.label}" scope="col" />
+                            <th th:text="#{gender.name.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="gender : ${genders}">
+                            <td th:text="${gender.id}" />
+                            <td th:text="${gender.name}" />
+                            <td>
+                                <form th:action="@{/genders/delete/{id}(id=${gender.id})}" th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm float-end">
+                                    <a th:href="@{/genders/edit/{id}(id=${gender.id})}" th:text="#{gender.list.edit}" class="btn btn-sm btn-info" />
+                                    <button th:text="#{gender.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
