@@ -6,14 +6,18 @@ import alkemy.challenge.disney_api_rest.model.MovieDTO;
 import alkemy.challenge.disney_api_rest.repos.GenderRepository;
 import alkemy.challenge.disney_api_rest.repos.MovieRepository;
 import alkemy.challenge.disney_api_rest.util.WebUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 
 @Service
 public class MovieService {
@@ -32,6 +36,23 @@ public class MovieService {
                 .stream()
                 .map(movie -> mapToDTO(movie, new MovieDTO()))
                 .collect(Collectors.toList());
+    }
+
+    public List<MovieDTO> findAllByOrder(String order) {
+
+        if (order.equals("DESC")) {
+            return movieRepository.findAll(Sort.by("id"))
+                    .stream()
+                    .map(movie -> mapToDTO(movie, new MovieDTO()))
+                    .sorted(Comparator.comparing(MovieDTO::getDateCreated).reversed())
+                    .collect(Collectors.toList());
+        } else {
+            return movieRepository.findAll(Sort.by("id"))
+                    .stream()
+                    .map(movie -> mapToDTO(movie, new MovieDTO()))
+                    .collect(Collectors.toList());
+        }
+
     }
 
     public MovieDTO get(final Long id) {
@@ -61,6 +82,7 @@ public class MovieService {
         movieDTO.setId(movie.getId());
         movieDTO.setImage(movie.getImage());
         movieDTO.setTitle(movie.getTitle());
+        movieDTO.setDateCreated(movie.getDateCreated());
         movieDTO.setGender(movie.getGender() == null ? null : movie.getGender().getId());
         return movieDTO;
     }
@@ -68,8 +90,9 @@ public class MovieService {
     private Movie mapToEntity(final MovieDTO movieDTO, final Movie movie) {
         movie.setImage(movieDTO.getImage());
         movie.setTitle(movieDTO.getTitle());
-        final Gender gender = movieDTO.getGender() == null ? null : genderRepository.findById(movieDTO.getGender())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "gender not found"));
+        final Gender gender = movieDTO.getGender() == null ? null
+                : genderRepository.findById(movieDTO.getGender())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "gender not found"));
         movie.setGender(gender);
         return movie;
     }
@@ -79,7 +102,8 @@ public class MovieService {
         final Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         if (!movie.getMovieCharacters().isEmpty()) {
-            return WebUtils.getMessage("movie.character.manyToOne.referenced", movie.getMovieCharacters().iterator().next().getId());
+            return WebUtils.getMessage("movie.character.manyToOne.referenced",
+                    movie.getMovieCharacters().iterator().next().getId());
         }
         return null;
     }

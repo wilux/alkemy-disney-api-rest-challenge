@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequestMapping(value = "/api/movies", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,6 +36,13 @@ public class MovieResource {
     @GetMapping("/{id}")
     public ResponseEntity<MovieDTO> getMovie(@PathVariable final Long id) {
         return ResponseEntity.ok(movieService.get(id));
+    }
+
+    @GetMapping(params = { "order" })
+    public ResponseEntity<List<MovieDTO>> getCharacterByOrder(@RequestParam String order) {
+
+        return ResponseEntity.ok(movieService.findAllByOrder(order));
+
     }
 
     @PostMapping
