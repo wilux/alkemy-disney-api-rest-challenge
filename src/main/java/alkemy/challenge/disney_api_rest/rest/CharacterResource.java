@@ -56,9 +56,9 @@ public class CharacterResource {
 
     @GetMapping(params = { "movies" })
     @JsonView(value = View.UserView.External.class)
-    public ResponseEntity<List<CharacterDTO>> getCharacterByMovie(@RequestParam Long movie) {
-        System.out.println("TESTTTTTTTTTTTTTTTTTTTTT" + movie);
-        return ResponseEntity.ok(characterService.getByMovieId(movie));
+    public ResponseEntity<List<CharacterDTO>> getCharacterByMovie(@RequestParam Long movies) {
+
+        return ResponseEntity.ok(characterService.getByMovie(movies));
 
     }
 

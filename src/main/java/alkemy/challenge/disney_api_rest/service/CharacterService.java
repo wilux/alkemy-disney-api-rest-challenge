@@ -48,10 +48,9 @@ public class CharacterService {
                 .collect(Collectors.toList());
     }
 
-    public List<CharacterDTO> getByMovieId(final Long movie) {
+    public List<CharacterDTO> getByMovie(final Long idMovie) {
 
-        // System.out.println(idMovie);
-        return characterRepository.findByMovie(movie)
+        return characterRepository.findByMovieId(idMovie)
                 .stream()
                 .map(character -> mapToDTO(character, new CharacterDTO()))
                 .collect(Collectors.toList());
