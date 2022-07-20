@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 @Controller
 @RequestMapping("/characters")
 public class CharacterController {
@@ -34,7 +33,7 @@ public class CharacterController {
     @ModelAttribute
     public void prepareContext(final Model model) {
         model.addAttribute("movieValues", movieRepository.findAll().stream().collect(
-                Collectors.toMap(Movie::getId, Movie::getImage)));
+                Collectors.toMap(Movie::getId, Movie::getTitle)));
     }
 
     @GetMapping

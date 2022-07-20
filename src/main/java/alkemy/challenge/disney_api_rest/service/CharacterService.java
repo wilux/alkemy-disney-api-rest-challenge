@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-
 @Service
 public class CharacterService {
 
@@ -31,6 +30,33 @@ public class CharacterService {
                 .map(character -> mapToDTO(character, new CharacterDTO()))
                 .collect(Collectors.toList());
     }
+
+    // Mis modificaciones
+    public List<CharacterDTO> getByName(final String name) {
+
+        return characterRepository.findByName(name)
+                .stream()
+                .map(character -> mapToDTO(character, new CharacterDTO()))
+                .collect(Collectors.toList());
+    }
+
+    public List<CharacterDTO> getByAge(final String age) {
+
+        return characterRepository.findByAge(age)
+                .stream()
+                .map(character -> mapToDTO(character, new CharacterDTO()))
+                .collect(Collectors.toList());
+    }
+
+    public List<CharacterDTO> getByMovie(final Long id) {
+
+        return characterRepository.findByMovie(id)
+                .stream()
+                .map(character -> mapToDTO(character, new CharacterDTO()))
+                .collect(Collectors.toList());
+
+    }
+    // Mis modificaciones
 
     public CharacterDTO get(final Long id) {
         return characterRepository.findById(id)
@@ -70,8 +96,9 @@ public class CharacterService {
         character.setName(characterDTO.getName());
         character.setAge(characterDTO.getAge());
         character.setWeight(characterDTO.getWeight());
-        final Movie movie = characterDTO.getMovie() == null ? null : movieRepository.findById(characterDTO.getMovie())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "movie not found"));
+        final Movie movie = characterDTO.getMovie() == null ? null
+                : movieRepository.findById(characterDTO.getMovie())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "movie not found"));
         character.setMovie(movie);
         return character;
     }

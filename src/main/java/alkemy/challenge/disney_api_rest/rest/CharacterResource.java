@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequestMapping(value = "/api/characters", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -32,6 +32,31 @@ public class CharacterResource {
     public ResponseEntity<List<CharacterDTO>> getAllCharacters() {
         return ResponseEntity.ok(characterService.findAll());
     }
+
+    // Mis modificaciones
+
+    @GetMapping(params = { "name" })
+    public ResponseEntity<List<CharacterDTO>> getCharacterByName(@RequestParam String name) {
+        System.out.println("name: " + name);
+        return ResponseEntity.ok(characterService.getByName(name));
+
+    }
+
+    @GetMapping(params = { "age" })
+    public ResponseEntity<List<CharacterDTO>> getCharacterByAge(@RequestParam String age) {
+        System.out.println("age: " + age);
+        return ResponseEntity.ok(characterService.getByAge(age));
+
+    }
+
+    @GetMapping(params = { "movies" })
+    public ResponseEntity<List<CharacterDTO>> getCharacterByMovie(@RequestParam final Long idMovie) {
+        System.out.println("movies: " + idMovie);
+        return ResponseEntity.ok(characterService.getByMovie(idMovie));
+
+    }
+
+    // Mis modificaciones
 
     @GetMapping("/{id}")
     public ResponseEntity<CharacterDTO> getCharacter(@PathVariable final Long id) {
