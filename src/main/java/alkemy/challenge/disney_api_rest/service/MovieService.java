@@ -3,18 +3,19 @@ package alkemy.challenge.disney_api_rest.service;
 import alkemy.challenge.disney_api_rest.domain.Gender;
 import alkemy.challenge.disney_api_rest.domain.Movie;
 import alkemy.challenge.disney_api_rest.model.MovieDTO;
+import alkemy.challenge.disney_api_rest.repos.CharacterRepository;
 import alkemy.challenge.disney_api_rest.repos.GenderRepository;
 import alkemy.challenge.disney_api_rest.repos.MovieRepository;
 import alkemy.challenge.disney_api_rest.util.WebUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,6 +25,9 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
     private final GenderRepository genderRepository;
+
+    @Autowired
+    CharacterRepository characterRepository;
 
     public MovieService(final MovieRepository movieRepository,
             final GenderRepository genderRepository) {
@@ -38,22 +42,47 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
+    // Mi codigo
+
     public List<MovieDTO> findAllByOrder(String order) {
 
-        if (order.equals("DESC")) {
+        List<MovieDTO> empty = new ArrayList<>();
+
+        if (order.equals("desc")) {
             return movieRepository.findAll(Sort.by("id"))
                     .stream()
                     .map(movie -> mapToDTO(movie, new MovieDTO()))
                     .sorted(Comparator.comparing(MovieDTO::getDateCreated).reversed())
                     .collect(Collectors.toList());
-        } else {
+        } else if (order.equals("asc")) {
             return movieRepository.findAll(Sort.by("id"))
                     .stream()
                     .map(movie -> mapToDTO(movie, new MovieDTO()))
                     .collect(Collectors.toList());
+        } else {
+            return empty;
         }
 
     }
+
+    public List<MovieDTO> getByName(final String name) {
+        return movieRepository.findByTitle(name)
+                .stream()
+                .map(movie -> mapToDTO(movie, new MovieDTO()))
+                .collect(Collectors.toList());
+    }
+
+    public MovieDTO getByGenre(final Long id) {
+        return movieRepository.findById(id)
+                .map(movie -> mapToDTO(movie, new MovieDTO()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    // public void deleteByIdAndCharacterId(Long characterId, MovieDTO movie) {
+    // characterRepository.deleteByIdAndMovie(characterId, movie);
+    // }
+
+    // Mi codigo
 
     public MovieDTO get(final Long id) {
         return movieRepository.findById(id)

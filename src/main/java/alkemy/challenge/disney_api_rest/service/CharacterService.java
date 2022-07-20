@@ -12,10 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-
 @Service
 public class CharacterService {
 
@@ -60,6 +56,11 @@ public class CharacterService {
                 .collect(Collectors.toList());
 
     }
+
+    public void deleteByIdAndMovieId(Long characterId, Long idMovie) {
+        characterRepository.deleteByIdAndMovieId(characterId, idMovie);
+    }
+
     // Mis modificaciones
 
     public CharacterDTO get(final Long id) {

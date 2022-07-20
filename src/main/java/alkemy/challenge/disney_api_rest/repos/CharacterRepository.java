@@ -1,9 +1,8 @@
 package alkemy.challenge.disney_api_rest.repos;
 
 import alkemy.challenge.disney_api_rest.domain.Character;
-
 import java.util.List;
-
+import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CharacterRepository extends JpaRepository<Character, Long> {
@@ -14,6 +13,7 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
 
     List<Character> findByMovie(Long id);
 
-    // List<Character> findByIdAndCharacterMovie_Id(Long id, Long id1);
-    // Mis modificaciones
+    @Transactional
+    List<Character> deleteByIdAndMovieId(Long idCharacter, long idMovie);
+
 }
