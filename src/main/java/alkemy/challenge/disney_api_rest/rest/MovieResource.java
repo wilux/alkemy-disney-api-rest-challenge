@@ -48,7 +48,7 @@ public class MovieResource {
         return ResponseEntity.ok(movieService.get(id));
     }
 
-    // Mi codigo
+    // Start my code
     @JsonView(value = View.UserView.External.class)
     @GetMapping(params = { "order" })
     public ResponseEntity<List<MovieDTO>> getCharacterByOrder(@RequestParam String order) {
@@ -71,18 +71,23 @@ public class MovieResource {
 
     }
 
-    // 9. Agregar/Remover personajes a una película
-    // Deberá existir un endpoint que nos permita agregar/remover personajes a una
-    // película.
-    // Los endpoint deberán ser:
-    // ● POST /movies/{idMovie}/characters/{idCharacter}
-    // ● DELETE /movies/{idMovie}/characters/{idCharacter}
-
     @PostMapping("/{idMovie}/characters/{idCharacter}")
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createCharacter(
-            @RequestBody @Valid final CharacterDTO characterDTO) {
-        return new ResponseEntity<>(characterService.create(characterDTO), HttpStatus.CREATED);
+    public ResponseEntity<Long> addMovieCharacter(
+            @PathVariable final Long idMovie,
+            @PathVariable final Long idCharacter) {
+
+        CharacterDTO characterDTO = new CharacterDTO();
+        characterDTO = characterService.get(idCharacter);
+
+        CharacterDTO NewcharacterDTO = new CharacterDTO();
+        NewcharacterDTO.setImage(characterDTO.getImage());
+        NewcharacterDTO.setName(characterDTO.getName());
+        NewcharacterDTO.setWeight(characterDTO.getWeight());
+        NewcharacterDTO.setAge(characterDTO.getAge());
+        NewcharacterDTO.setMovie(idMovie);
+
+        return new ResponseEntity<>(characterService.create(NewcharacterDTO), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{idMovie}/characters/{idCharacter}")
@@ -93,7 +98,7 @@ public class MovieResource {
         return ResponseEntity.noContent().build();
     }
 
-    // Mi codigo
+    // End My Code
 
     @PostMapping
     @ApiResponse(responseCode = "201")
