@@ -1,6 +1,5 @@
 package alkemy.challenge.disney_api_rest.rest;
 
-import alkemy.challenge.disney_api_rest.domain.Movie;
 import alkemy.challenge.disney_api_rest.model.CharacterDTO;
 import alkemy.challenge.disney_api_rest.model.MovieDTO;
 import alkemy.challenge.disney_api_rest.service.CharacterService;
@@ -9,7 +8,6 @@ import alkemy.challenge.disney_api_rest.view.View;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -2,19 +2,16 @@ package alkemy.challenge.disney_api_rest.service;
 
 import alkemy.challenge.disney_api_rest.domain.Gender;
 import alkemy.challenge.disney_api_rest.domain.Movie;
+import alkemy.challenge.disney_api_rest.model.CharacterDTO;
 import alkemy.challenge.disney_api_rest.model.MovieDTO;
-import alkemy.challenge.disney_api_rest.repos.CharacterRepository;
 import alkemy.challenge.disney_api_rest.repos.GenderRepository;
 import alkemy.challenge.disney_api_rest.repos.MovieRepository;
 import alkemy.challenge.disney_api_rest.util.WebUtils;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,14 +22,13 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
     private final GenderRepository genderRepository;
-
-    @Autowired
-    CharacterRepository characterRepository;
+    private final CharacterService characterService;
 
     public MovieService(final MovieRepository movieRepository,
-            final GenderRepository genderRepository) {
+            final GenderRepository genderRepository, CharacterService characterService) {
         this.movieRepository = movieRepository;
         this.genderRepository = genderRepository;
+        this.characterService = characterService;
     }
 
     public List<MovieDTO> findAll() {
@@ -42,7 +38,7 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
-    // Mi codigo
+    // Start of My code
 
     public List<MovieDTO> findAllByOrder(String order) {
 
@@ -78,11 +74,7 @@ public class MovieService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    // public void deleteByIdAndCharacterId(Long characterId, MovieDTO movie) {
-    // characterRepository.deleteByIdAndMovie(characterId, movie);
-    // }
-
-    // Mi codigo
+    // End of My code
 
     public MovieDTO get(final Long id) {
         return movieRepository.findById(id)
@@ -113,6 +105,9 @@ public class MovieService {
         movieDTO.setTitle(movie.getTitle());
         movieDTO.setDateCreated(movie.getDateCreated());
         movieDTO.setGender(movie.getGender() == null ? null : movie.getGender().getId());
+        List<CharacterDTO> characterDTO = characterService.getByMovie(movie.getId());
+        movieDTO.setCharactersList(characterDTO);
+
         return movieDTO;
     }
 

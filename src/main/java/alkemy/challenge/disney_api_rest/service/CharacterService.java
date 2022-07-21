@@ -31,7 +31,7 @@ public class CharacterService {
                 .collect(Collectors.toList());
     }
 
-    // Mis modificaciones
+    // Start of My code
     public List<CharacterDTO> getByName(final String name) {
 
         return characterRepository.findByName(name)
@@ -61,7 +61,7 @@ public class CharacterService {
         characterRepository.deleteByIdAndMovieId(characterId, idMovie);
     }
 
-    // Mis modificaciones
+    // End of My code
 
     public CharacterDTO get(final Long id) {
         return characterRepository.findById(id)
