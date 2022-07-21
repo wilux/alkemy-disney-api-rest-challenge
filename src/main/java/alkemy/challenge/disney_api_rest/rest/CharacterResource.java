@@ -38,6 +38,16 @@ public class CharacterResource {
 
     // Mis modificaciones
 
+    @PostMapping
+    @ApiResponse(responseCode = "201")
+    public ResponseEntity<List<CharacterDTO>> createCharacter(
+
+            @RequestBody @Valid final CharacterDTO characterDTO) {
+        new ResponseEntity<>(characterService.create(characterDTO), HttpStatus.CREATED);
+
+        return ResponseEntity.ok(characterService.findAll());
+    }
+
     @GetMapping(params = { "name" })
     @JsonView(value = View.UserView.External.class)
     public ResponseEntity<List<CharacterDTO>> getCharacterByName(@RequestParam String name) {
@@ -67,13 +77,6 @@ public class CharacterResource {
     @GetMapping("/{id}")
     public ResponseEntity<CharacterDTO> getCharacter(@PathVariable final Long id) {
         return ResponseEntity.ok(characterService.get(id));
-    }
-
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createCharacter(
-            @RequestBody @Valid final CharacterDTO characterDTO) {
-        return new ResponseEntity<>(characterService.create(characterDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
