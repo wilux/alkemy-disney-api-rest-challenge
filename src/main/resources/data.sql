@@ -7,6 +7,8 @@ INSERT INTO movie (id, image, title, DATE_CREATED, LAST_UPDATED,GENDER_ID) VALUE
 INSERT INTO movie (id, image, title, DATE_CREATED, LAST_UPDATED,GENDER_ID) VALUES (10002,'ImageMovie3', 'Movie 3', '2022-07-17','2022-07-17',10002);
 INSERT INTO movie (id, image, title, DATE_CREATED, LAST_UPDATED,GENDER_ID) VALUES (10003,'ImageMovie4', 'Movie 4', '2022-07-18','2022-07-18',10003);
 INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10000,'ImageCharacter1', 'Name1','24','70', 'History A', '2022-07-15','2022-07-15',10000);
-INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10001,'ImageCharacter2', 'Name2','24','70', 'History B', '2022-07-15','2022-07-15',10001);
-INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10002,'ImageCharacter3', 'Name3','24','70', 'History C', '2022-07-15','2022-07-15',10002);
-INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10003,'ImageCharacter4', 'Name4','24','70', 'History D', '2022-07-15','2022-07-15',10003);
+INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10001,'ImageCharacterb', 'Nameb','24','70', 'History A1', '2022-07-15','2022-07-15',10000);
+INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10002,'ImageCharacterc', 'Namec','24','70', 'History A2', '2022-07-15','2022-07-15',10000);
+INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10003,'ImageCharacter2', 'Name2','24','70', 'History B', '2022-07-15','2022-07-15',10001);
+INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10004,'ImageCharacter3', 'Name3','24','70', 'History C', '2022-07-15','2022-07-15',10002);
+INSERT INTO character (id, image, name, age, weight, history, DATE_CREATED, LAST_UPDATED, MOVIE_ID) VALUES (10005,'ImageCharacter4', 'Name4','24','70', 'History D', '2022-07-15','2022-07-15',10003);

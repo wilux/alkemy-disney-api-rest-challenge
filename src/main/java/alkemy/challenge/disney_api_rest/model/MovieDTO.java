@@ -1,6 +1,7 @@
 package alkemy.challenge.disney_api_rest.model;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -30,6 +31,17 @@ public class MovieDTO {
 
     @NotNull
     private Long gender;
+
+    @JsonView(View.UserView.External.class)
+    private List<CharacterDTO> charactersList;
+
+    public List<CharacterDTO> getCharactersList() {
+        return this.charactersList;
+    }
+
+    public void setCharactersList(List<CharacterDTO> characterDTO) {
+        this.charactersList = characterDTO;
+    }
 
     public Long getId() {
         return id;

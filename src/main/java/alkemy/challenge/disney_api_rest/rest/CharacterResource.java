@@ -36,7 +36,7 @@ public class CharacterResource {
         return ResponseEntity.ok(characterService.findAll());
     }
 
-    // Mis modificaciones
+    // Start My code
 
     @PostMapping
     @ApiResponse(responseCode = "201")
@@ -72,7 +72,7 @@ public class CharacterResource {
 
     }
 
-    // Mis modificaciones
+    // End my Code
 
     @GetMapping("/{id}")
     public ResponseEntity<CharacterDTO> getCharacter(@PathVariable final Long id) {
