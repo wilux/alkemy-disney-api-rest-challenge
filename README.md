@@ -2,6 +2,10 @@
 
 This app was created with Bootify.io - more documentation [can be found here](https://bootify.io/docs/). Feel free to contact us for further questions.
 
+## CHALLENGE BACKEND - Java Spring Boot (API)
+
+- [Challenge](https://drive.google.com/file/d/1ICHCzERR_tC9yB9crJyxVoqtNXsduOky/view)
+
 ## Development
 
 During development it is recommended to use the profile `local`. In IntelliJ, `-Dspring.profiles.active=local` can be added in the VM options of the Run Configuration after enabling this property in "Modify options".
@@ -26,8 +30,8 @@ java -Dspring.profiles.active=production -jar ./target/disney-api-rest-0.0.1-SNA
 
 ## Further readings
 
-* [Maven docs](https://maven.apache.org/guides/index.html)  
-* [Spring Boot reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)  
-* [Spring Data JPA reference](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)  
-* [Thymeleaf docs](https://www.thymeleaf.org/documentation.html)  
-* [Bootstrap docs](https://getbootstrap.com/docs/5.1/getting-started/introduction/)  
+- [Maven docs](https://maven.apache.org/guides/index.html)
+- [Spring Boot reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
+- [Spring Data JPA reference](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
+- [Thymeleaf docs](https://www.thymeleaf.org/documentation.html)
+- [Bootstrap docs](https://getbootstrap.com/docs/5.1/getting-started/introduction/)
