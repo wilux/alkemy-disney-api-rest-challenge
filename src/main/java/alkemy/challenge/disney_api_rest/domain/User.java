@@ -1,86 +1,43 @@
 package alkemy.challenge.disney_api_rest.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "username"),
-    @UniqueConstraint(columnNames = "email")
-})
+@Table(name = "username")
 public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  @NotBlank
-  @Size(max = 20)
-  private String username;
+    @Id
+    @Column(nullable = false, updatable = false)
+    @SequenceGenerator(name = "primary_sequence", sequenceName = "primary_sequence", allocationSize = 1, initialValue = 100000)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "primary_sequence")
+    private long id;
 
-  @NotBlank
-  @Size(max = 50)
-  @Email
-  private String email;
+    @Column
+    private String email;
 
-  @NotBlank
-  @Size(max = 120)
-  private String password;
+    @Column
+    private String password;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+    public String getPassword() {
+        return password;
+    }
 
-  public User() {
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public User(String username, String email, String password) {
-    this.username = username;
-    this.email = email;
-    this.password = password;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
 }

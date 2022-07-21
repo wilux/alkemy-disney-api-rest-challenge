@@ -1,136 +1,79 @@
 package alkemy.challenge.disney_api_rest.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import alkemy.challenge.disney_api_rest.domain.ERole;
-import alkemy.challenge.disney_api_rest.domain.Role;
 import alkemy.challenge.disney_api_rest.domain.User;
-import alkemy.challenge.disney_api_rest.model.LoginRequest;
-import alkemy.challenge.disney_api_rest.model.MessageResponse;
-import alkemy.challenge.disney_api_rest.model.SignupRequest;
-import alkemy.challenge.disney_api_rest.model.UserInfoResponse;
-import alkemy.challenge.disney_api_rest.repos.RoleRepository;
+import alkemy.challenge.disney_api_rest.model.LoginCredentials;
 import alkemy.challenge.disney_api_rest.repos.UserRepository;
-import alkemy.challenge.disney_api_rest.security.jwt.JwtUtils;
-import alkemy.challenge.disney_api_rest.security.services.UserDetailsImpl;
+import alkemy.challenge.disney_api_rest.security.JWTUtil;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
-@RestController
-@RequestMapping("/api/auth")
+import java.util.Collections;
+import java.util.Map;
+
+@RestController // Marks the class a rest controller
+@RequestMapping("/api/auth") // Requests made to /api/auth/anything will be handles by this class
 public class AuthController {
-  @Autowired
-  AuthenticationManager authenticationManager;
 
-  @Autowired
-  UserRepository userRepository;
+    // Injecting Dependencies
+    @Autowired
+    private UserRepository userRepo;
+    @Autowired
+    private JWTUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authManager;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-  @Autowired
-  RoleRepository roleRepository;
+    // Defining the function to handle the POST route for registering a user
+    @PostMapping("/register")
+    public Map<String, Object> registerHandler(@RequestBody User user) {
+        // Encoding Password using Bcrypt
+        String encodedPass = passwordEncoder.encode(user.getPassword());
 
-  @Autowired
-  PasswordEncoder encoder;
+        // Setting the encoded password
+        user.setPassword(encodedPass);
 
-  @Autowired
-  JwtUtils jwtUtils;
+        // Persisting the User Entity to H2 Database
+        user = userRepo.save(user);
 
-  @PostMapping("/signin")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        // Generating JWT
+        String token = jwtUtil.generateToken(user.getEmail());
 
-    Authentication authentication = authenticationManager
-        .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-
-    List<String> roles = userDetails.getAuthorities().stream()
-        .map(item -> item.getAuthority())
-        .collect(Collectors.toList());
-
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(userDetails.getId(),
-            userDetails.getUsername(),
-            userDetails.getEmail(),
-            roles));
-  }
-
-  @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+        // Responding with JWT
+        return Collections.singletonMap("jwt-token", token);
     }
 
-    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-    }
+    // Defining the function to handle the POST route for logging in a user
+    @PostMapping("/login")
+    public Map<String, Object> loginHandler(@RequestBody LoginCredentials body) {
+        try {
+            // Creating the Authentication Token which will contain the credentials for
+            // authenticating
+            // This token is used as input to the authentication process
+            UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
+                    body.getEmail(), body.getPassword());
 
-    // Create new user's account
-    User user = new User(signUpRequest.getUsername(),
-        signUpRequest.getEmail(),
-        encoder.encode(signUpRequest.getPassword()));
+            // Authenticating the Login Credentials
+            authManager.authenticate(authInputToken);
 
-    Set<String> strRoles = signUpRequest.getRole();
-    Set<Role> roles = new HashSet<>();
+            // If this point is reached it means Authentication was successful
+            // Generate the JWT
+            String token = jwtUtil.generateToken(body.getEmail());
 
-    if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
-    } else {
-      strRoles.forEach(role -> {
-        switch (role) {
-          case "admin":
-            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
-
-            break;
-          case "mod":
-            Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(modRole);
-
-            break;
-          default:
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
+            // Respond with the JWT
+            return Collections.singletonMap("jwt-token", token);
+        } catch (AuthenticationException authExc) {
+            // Auhentication Failed
+            throw new RuntimeException("Invalid Login Credentials");
         }
-      });
     }
 
-    user.setRoles(roles);
-    userRepository.save(user);
-
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-  }
-
-  @PostMapping("/signout")
-  public ResponseEntity<?> logoutUser() {
-    ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-        .body(new MessageResponse("You've been signed out!"));
-  }
 }
