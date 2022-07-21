@@ -9,12 +9,14 @@ This app was created with Bootify.io - more documentation [can be found here](ht
 ## Usage
 
 1.- Run SpringBoot App
+
 2.- Front -> http://localhost:8080/
+
 3.- Swagger -> http://localhost:8080/swagger-ui/index.html
 
 ## EndPoints
 
-movie-resource
+## movie-resource
 
 GET
 /api/movies/{id}
@@ -36,7 +38,8 @@ POST
 
 DELETE
 /api/movies/{idMovie}/characters/{idCharacter}
-gender-resource
+
+## gender-resource
 
 GET
 /api/genders/{id}
@@ -52,7 +55,8 @@ GET
 
 POST
 /api/genders
-character-resource
+
+## character-resource
 
 GET
 /api/characters/{id}
@@ -68,7 +72,8 @@ GET
 
 POST
 /api/characters
-auth-resource
+
+## auth-resource
 
 POST
 /api/auth/register
