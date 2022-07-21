@@ -91,6 +91,7 @@ public class CharacterService {
         characterDTO.setImage(character.getImage());
         characterDTO.setName(character.getName());
         characterDTO.setAge(character.getAge());
+        characterDTO.setHistory(character.getHistory());
         characterDTO.setWeight(character.getWeight());
         characterDTO.setMovie(character.getMovie() == null ? null : character.getMovie().getId());
         return characterDTO;
@@ -101,6 +102,7 @@ public class CharacterService {
         character.setName(characterDTO.getName());
         character.setAge(characterDTO.getAge());
         character.setWeight(characterDTO.getWeight());
+        character.setHistory(characterDTO.getHistory());
         final Movie movie = characterDTO.getMovie() == null ? null
                 : movieRepository.findById(characterDTO.getMovie())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "movie not found"));

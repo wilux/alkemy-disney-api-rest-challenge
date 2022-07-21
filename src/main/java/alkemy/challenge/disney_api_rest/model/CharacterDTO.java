@@ -29,6 +29,10 @@ public class CharacterDTO {
     private String weight;
 
     @NotNull
+    @Size(max = 255)
+    private String history;
+
+    @NotNull
     private Long movie;
 
     public Long getId() {
@@ -69,6 +73,14 @@ public class CharacterDTO {
 
     public void setWeight(final String weight) {
         this.weight = weight;
+    }
+
+    public String getHistory() {
+        return this.history;
+    }
+
+    public void setHistory(String history) {
+        this.history = history;
     }
 
     public Long getMovie() {

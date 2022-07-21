@@ -1,49 +1,71 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{character.list.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <div class="d-flex flex-wrap mb-4">
-                <h1 th:text="#{character.list.headline}" class="flex-grow-1" />
-                <div>
-                    <a th:href="@{/characters/add}" th:text="#{character.list.createNew}" class="btn btn-primary ms-2" />
-                </div>
-            </div>
-            <div th:if="${characters.empty}" th:text="#{character.list.empty}" />
-            <div th:if="${!characters.empty}" class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th th:text="#{character.id.label}" scope="col" />
-                            <th th:text="#{character.image.label}" scope="col" />
-                            <th th:text="#{character.name.label}" scope="col" />
-                            <th th:text="#{character.age.label}" scope="col" />
-                            <th th:text="#{character.weight.label}" scope="col" />
-                            <th th:text="#{character.movie.label}" scope="col" />
-                            <th><!-- --></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="character : ${characters}">
-                            <td th:text="${character.id}" />
-                            <td th:text="${character.image}" />
-                            <td th:text="${character.name}" />
-                            <td th:text="${character.age}" />
-                            <td th:text="${character.weight}" />
-                            <td th:text="${character.movie}" />
-                            <td>
-                                <form th:action="@{/characters/delete/{id}(id=${character.id})}" th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm float-end">
-                                    <a th:href="@{/characters/edit/{id}(id=${character.id})}" th:text="#{character.list.edit}" class="btn btn-sm btn-info" />
-                                    <button th:text="#{character.list.delete}" type="submit" class="btn btn-sm btn-danger" />
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title th:text="#{character.list.headline}" />
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="d-flex flex-wrap mb-4">
+        <h1 th:text="#{character.list.headline}" class="flex-grow-1" />
+        <div>
+          <a
+            th:href="@{/characters/add}"
+            th:text="#{character.list.createNew}"
+            class="btn btn-primary ms-2"
+          />
         </div>
-    </body>
+      </div>
+      <div th:if="${characters.empty}" th:text="#{character.list.empty}" />
+      <div th:if="${!characters.empty}" class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th th:text="#{character.id.label}" scope="col" />
+              <th th:text="#{character.image.label}" scope="col" />
+              <th th:text="#{character.name.label}" scope="col" />
+              <th th:text="#{character.age.label}" scope="col" />
+              <th th:text="#{character.weight.label}" scope="col" />
+              <th th:text="#{character.history.label}" scope="col" />
+              <th th:text="#{character.movie.label}" scope="col" />
+              <th><!-- --></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="character : ${characters}">
+              <td th:text="${character.id}" />
+              <td th:text="${character.image}" />
+              <td th:text="${character.name}" />
+              <td th:text="${character.age}" />
+              <td th:text="${character.weight}" />
+              <td th:text="${character.history}" />
+              <td th:text="${character.movie}" />
+              <td>
+                <form
+                  th:action="@{/characters/delete/{id}(id=${character.id})}"
+                  th:data-confirm-message="#{delete.confirm}"
+                  method="post"
+                  class="js-submit-confirm float-end"
+                >
+                  <a
+                    th:href="@{/characters/edit/{id}(id=${character.id})}"
+                    th:text="#{character.list.edit}"
+                    class="btn btn-sm btn-info"
+                  />
+                  <button
+                    th:text="#{character.list.delete}"
+                    type="submit"
+                    class="btn btn-sm btn-danger"
+                  />
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
 </html>

@@ -37,6 +37,9 @@ public class Character {
     @Column(nullable = false)
     private String weight;
 
+    @Column(nullable = false)
+    private String history;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
@@ -87,6 +90,14 @@ public class Character {
 
     public void setWeight(final String weight) {
         this.weight = weight;
+    }
+
+    public String getHistory() {
+        return this.history;
+    }
+
+    public void setHistory(String history) {
+        this.history = history;
     }
 
     public Movie getMovie() {
